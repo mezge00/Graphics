@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <meta charset="utf-8" />
+        <title>Sample Three.js</title>
+        <style>
+        body { 
+            margin: 0;
+            list-style-type: none;
+            position: relative;
+            overflow: hidden;
+            min-width: 500px;
+            display: block;
+            float: right;
+            
+        }
+
+      </style>
+    <meta charset=utf-8 />
+    
+    
+   
+    </head>
+    <body>
+   
+   
+       <script src="threee.js"></script>
+       <script src="examples/jsm/loaders/FontLoader.js"></script>
+    
+    <script>
+                var scene=new THREE.Scene();
+                var camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1000);
+                var renderer=new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth,window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                const loader = new THREE.FontLoader();
+                loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
+                    const geometry = new TextGeometry( 'Hello three.js!', {
+                        font: font,
+                        size: 80,
+                        height: 5,
+                        curveSegments: 12,
+                        bevelEnabled: true,
+                        bevelThickness: 10,
+                        bevelSize: 8,
+                        bevelOffset: 0,
+                        bevelSegments: 5
+                    } );
+                } );
+
+                var textMaterial=new THREE.MeshBasicMaterial({color:0xeccfff});
+                var text=new THREE.Mesh(geometry,textMaterial);
+
+
+           
+               // scene.add(line);
+               scene.add(text);
+               camera.position.set(0,50,-60);
+			   camera.lookAt(0,0,0);
+              
+
+                function animate(){
+                    requestAnimationFrame(animate);
+
+                   text.rotation.y+=0.02;
+                   text.rotation.x+=0.02;
+
+
+                    renderer.render(scene,camera);
+
+                }
+                
+                
+                animate();
+                </script>
+            
+                    
+                </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CS4406 Assignment </title>
+</head>
+<body>
+    <canvas id="myPark" width="500" height="600"></canvas>
+    
+    <script>
+        // Those are just variables 
+        const fpt=30;  // Frame size 
+        var ball= "blue";  // We have the object balls with color blue
+        var bs=30;         // Radius of the ball 
+        var bx,by;         // the x and y co-ordinates of the ball
+        var xv,yv;         // The velocity of the ball to be adjusted 
+
+
+        canvas=document.getElementById("myPark");    // The way which we get the canvas 
+        context=canvas.getContext("2d");            // A graphics API used for accessing graphics objects
+
+        setInterval(update,1000/fpt);               // the interval where the ball should have to be updated 
+
+        //starting position.
+        bx=Math.random()*250+1;                   // we can pick random values of the ball to start on the canvas
+        by=Math.random()*250+1;
+
+
+        // random speed  
+        xv=Math.floor(Math.random()*100+25)/fpt;  // those values can be adjusted 
+        yv=Math.floor(Math.random()*100+25)/fpt;    //so that it helps to controle the ball speed
+
+
+        // A function used to draw the ball using path method 
+    function drawBall() {
+    
+    context.beginPath();
+    context.arc(bx, by, bs, 0, Math.PI*2);
+    context.fillStyle = ball;
+    context.fill();
+    context.strokeStyle = "white"; 
+    context.lineWidth = 5
+    context.stroke();
+    
+    context.closePath();
+
+
+    // Maing the ball to move in random direction 
+
+    if(Math.floor(Math.random()*100)==0){
+        xv=-xv;
+    }
+    if(Math.floor(Math.random()*20)==0){
+        yv=-yv;
+    }
+}
+
+// This is the update function, it updates the motion of the ball in a given interval
+        function update(){
+            bx+=xv;
+            by+=yv;
+
+            // Those if closes help to bounce the ball
+            if(bx-bs/2<0&&xv<0){
+                xv=-xv;
+            }
+            if(bx+bs/2>canvas.width&&xv>0){
+                xv=-xv;
+            }
+            if(by-bs/2<0&&yv<0){
+                yv=-yv;
+            }
+            if(by+bs/2>canvas.width&&yv>0){
+                yv=-yv;
+            }
+
+            
+            // creating a rectangular canvas 
+
+            context.fillStyle="#ffff11";   // color of the canvas 
+            context.fillRect(0,0,canvas.width,canvas.height);   // the canvas rectangle 
+            drawBall();
+            
+        }
+
+
+
+
+ 
+
+
+
+    </script>
+    
+</body>
+
+</html>

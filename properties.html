@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body{
+            margin: 0%;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loaders shaders textures and buffers</title>
+
+</head>
+<body>
+    <script src="threee.js"></script>
+    <script src="threex.domevents.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+        var scene=new THREE.Scene();
+        var clock=new THREE.Clock();
+        var camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1000);
+        camera.position.z=400;
+        //camera.position.x=2;
+        //camera.position.y=2;
+        scene.add(camera);
+        var renderer= new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        var control=new THREE.OrbitControls(camera,renderer.domElement);
+        control.minDistance=1;
+        control.maxDistance=1000;
+
+        
+
+        var ballMaterial = new THREE.MeshLambertMaterial(
+	{
+        color:0x1aafcf, wireframe: false, side: THREE.DoubleSide
+	});
+      
+        // 3D object selected: sphere
+        // create the ball geometry with diameter 15 and 32 separations 
+        var ballGeometry = new THREE.SphereGeometry( 20, 32, 32 );
+    
+        // apply the geometry and material to the ball  
+        var ball  = new THREE.Mesh( ballGeometry, ballMaterial);  
+        var ball1 = new THREE.Mesh( ballGeometry, ballMaterial);  
+        var ball2  = new THREE.Mesh( ballGeometry, ballMaterial);  
+        var ball3 = new THREE.Mesh( ballGeometry, ballMaterial);  
+        var ball4 = new THREE.Mesh( ballGeometry, ballMaterial);  
+
+
+
+
+        
+        // apply castshadow to the ball so it will cast shadow to the plane
+        ball.castShadow = true; 
+        ball1.castShadow = true;
+        ball2.castShadow = true;
+        ball3.castShadow = true;
+        ball4.castShadow = true;
+        // set receiveShadow to false so that other objects don't cast shadow on the ball
+        ball.receiveShadow = false;
+        ball1.receiveShadow = false; 
+        ball2.receiveShadow = false; 
+        ball3.receiveShadow = false; 
+        ball4.receiveShadow = false; 
+   	// add the ball to the scene
+	   scene.add( ball );  
+       scene.add( ball1 );
+       scene.add( ball2);
+       scene.add( ball3);
+       scene.add( ball4);
+       ball.position.set(20,0,20);
+       ball1.position.set(100,0,20);
+       ball2.position.set(200,0,20);
+       ball3.position.set(-100,0,20);
+       ball4.position.set(-50,0,20);
+
+        //Creating a plane 
+        var planeGeometry=new THREE.PlaneBufferGeometry(1000, 400,32,32);
+        var planeMaterial=new THREE.MeshStandardMaterial({color:0x7d0ca6, side: THREE.DoubleSide });
+        var plane=new THREE.Mesh(planeGeometry,planeMaterial);
+        plane.receiveShadow=true;
+        //plane.castShadow=false;
+
+        var planeGeometry=new THREE.PlaneBufferGeometry(1200, 800,32,32);
+        var planeMaterial=new THREE.MeshStandardMaterial({color:0x230ca6, side: THREE.DoubleSide });
+        var plane1=new THREE.Mesh(planeGeometry,planeMaterial);
+        plane1.receiveShadow=true;
+
+      
+
+       /// const geometry = new THREE.PlaneGeometry( 1, 1 );
+        //const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+        //const plane = new THREE.Mesh( geometry, material );
+        //scene.add( plane );
+
+
+        plane.position.y=-100;
+        plane.rotation.x+=181;
+        
+            
+        plane1.position.z=-200;
+        //plane1.rotation.y+=90;
+        //plane1.rotation.x+=90;
+        
+        //plane.rotation.y+=-2;
+        var light=new THREE.DirectionalLight(0xccc040,3,100);
+
+        light.position.set(100,100,100);
+        light.castShadow=true;
+        //light.shadow.mapSize.width = 500;
+
+        scene.add(light);
+        
+
+        scene.add(plane);
+        scene.add(plane1);
+        control.update();
+
+        var domevents=new THREEx.DomEvents(camera,renderer.domElement);
+        const ballclicked=true;
+        domevents.addEventListener(ball,'click',event=>{
+            if(ballclicked){
+                ball.position.z=-20;
+                ballclicked=true;
+
+
+
+            }else if(!ballclicked){
+                ball.position.z=20;
+                ballclicked=false;
+        }
+
+            
+
+            //}
+
+        });
+
+
+        
+
+        function animate(){
+            requestAnimationFrame(animate);
+            ball.rotation.y+=0.03;
+            ball2.rotation.x+=0.03;
+            ball1.rotation.z+=0.03;
+            ball3.rotation.y+=0.003;
+            ball4.rotation.x+=0.03;
+            ball1.rotation.x+=0.03;
+            ball2.rotation.y+=0.03;
+            ball3.rotation.z+=0.03;
+            ball.rotation.y+=0.003;
+
+            renderer.render(scene,camera);
+
+        }
+        animate();
+
+
+
+
+    </script>
+    
+</body>
+</html>

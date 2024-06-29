@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <meta charset="utf-8" />
+        <title>Sample Three.js</title>
+        <style>
+        body { 
+            margin: 0;
+            list-style-type: none;
+            position: relative;
+            overflow: hidden;
+            min-width: 500px;
+            display: block;
+            float: right;
+            
+        }
+
+      </style>
+    <meta charset=utf-8 />
+    
+    
+   
+    </head>
+    <body>
+   
+   
+       <script src="threee.js"></script>
+    
+    <script>
+                var scene=new THREE.Scene();
+                var camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1000);
+                var renderer=new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth,window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+
+                /*creating shapes for love;
+                const x = 0, y = 0;
+
+            const heartShape = new THREE.Shape();
+
+           heartShape.moveTo( x + 5, y + 5 );
+           heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+           heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+           heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+           heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+           heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+           heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+           **/
+
+           //const extrudeSettings = { depth: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+               /* var width=8,height=12;
+
+                var shape=new THREE.Shape();
+                shape.moveTo(0,0);
+                shape.lineTo(0,width);
+                shape.lineTo(height,width);
+                shape.lineTo(height,0);
+                shape.lineTo(0,0);
+                var extrudeSettings={
+                    steps:2,
+                    depth:16,
+                    bevelEnabled:true,
+                    bevelThikness:1,
+                    bevelSize:1,
+                    bevelOffset:0,
+                    bevelSegments:1
+                };**/
+                //for lathe
+               
+                const points = [];
+                for(let i=0;i<10000;i++){
+                    points.push(new THREE.Vector2(Math.sin(i*0.2)*10+5,(i-5)*0.01));}
+               
+
+
+                //creating an object Geometry
+                //var boxGeometry=new THREE.BoxGeometry(20,20,20);
+                //var spereGemetry=new THREE.SphereGeometry(5, 100, 100);
+                //var cylinderGeometry=new THREE.CylinderGeometry(3,3,10,105);
+                //var extrudegeometry=new THREE.ExtrudeGeometry(shape,extrudeSettings);
+                //var loathGeometry=new THREE.LatheGeometry(points);
+                //var planeGeometery=new THREE.PlaneGeometry(100,100);
+                //var ringGeometry=new THREE.RingGeometry(24,48,30);
+                //var shapeGeometery=new THREE.ShapeGeometery(heartShape);
+                //var torusGeometry=new THREE.TorusGeometry(15,5,50,30);
+                var torusknotGeometry=new THREE.TorusKnotGeometry(20,2);
+
+
+
+
+
+
+
+                //var edges=new THREE.EdgesGeometry(torusknotGeometry);
+               // var line=new THREE.LineSegments(edges,new THREE.LineBasicMaterial({color:0xcccdaa}));
+
+                //var cicleGeometry =new THREE.CircleGeometry(20,10);
+                //var coneGeometry=new THREE.ConeGeometry(10,20,20);
+                //var dodecaGeometry=new THREE.DodecahedronGeometry(10,20);
+
+
+
+
+
+
+                var boxMaterial=new THREE.MeshBasicMaterial({
+                    ambient: 0xccc555,
+                    color: 0xdd00ff,
+                   /// side:THREE.DoubleSide,
+                    specular: 0x00ff00,
+                    shininess: 50,
+                    shading: THREE.SmoothShading
+                });
+               var cube =new THREE.Mesh(torusknotGeometry,boxMaterial);
+               //var cube1 =new THREE.Mesh(torusGeometry,boxMaterial);
+               //var cube2 =new THREE.Mesh(planeGeometery,boxMaterial);
+               //var cube3 =new THREE.Mesh(ringGeometry,boxMaterial);
+               //var cube4 =new THREE.Mesh(loathGeometry,boxMaterial);
+               //var cube5 =new THREE.Mesh(cicleGeometry,boxMaterial);
+               //var cube6 =new THREE.Mesh(coneGeometry,boxMaterial);
+              // var cube7 =new THREE.Mesh(cylinderGeometry,boxMaterial);
+               //var cube8 =new THREE.Mesh(loathGeometry,boxMaterial);
+
+
+
+
+
+
+
+
+
+
+                scene.add(cube);
+                //scene.add(cube1);
+               // scene.add(cube2);
+                //scene.add(cube3);
+               // scene.add(cube4);
+                //scene.add(cube5);
+               // scene.add(cube8);
+               // scene.add(line);
+                camera.position.z=300;
+			          //camera.lookAt(0,0,0);
+                //cube.rotation.y+=0.002;
+                //cube.rotation.y+=2;
+
+                function animate(){
+                    requestAnimationFrame(animate);
+
+                   //cube.rotation.y+=0.002;
+                   //cube1.rotation.x+=0.03;
+                   //cube2.rotation.z+=0.03;
+                   //cube2.rotation.y+=0.002;
+                   //cube3.rotation.x+=0.03;
+                   //cube4.rotation.z+=0.03;
+                   //cube5.rotation.y+=0.002;
+                   //cube6.rotation.x+=0.03;
+                   //cube7.rotation.z+=0.03;
+                   cube.rotation.y+=0.002;
+                   cube.rotation.x+=0.03;
+                   cube.rotation.z+=0.0003;
+
+
+
+
+                    renderer.render(scene,camera);
+
+                }
+                
+                
+                animate();
+                </script>
+            
+                    
+                </body>
+</html>

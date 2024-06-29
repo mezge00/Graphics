@@ -1,0 +1,88 @@
+html{
+    background-image: url("fdg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+
+}
+#menu,#menu ul{
+    margin: 0;
+    padding: 0%;
+    list-style: none;
+   
+
+}
+
+#menu{
+    margin: -10px auto;
+    list-style-type:none;
+    padding: 2px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: rgba(13, 6, 110, 0.596);
+    top: 0%;
+
+    
+}
+
+#menu:before,
+#menu::after{
+    content: '';
+    display: table;
+}
+#menu::after{
+    clear: both;
+}
+#menu li {
+    float: left;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 1px 0 0 #444;
+    border-right: 1px solid black;
+    min-width: 60px;
+    position: relative;
+}
+#menu a{
+    width: 100px;
+    float: left;
+    display: block;
+    color: white;
+    padding: 12px 30px;
+    text-align: center;
+    text-decoration: none;
+    
+}
+
+#menu ul{
+    margin: 40px 0px 0px;
+    visibility: hidden;
+    position: absolute;
+    top: -40px;
+    background-color: darkblue;
+    left: 0%;
+    z-index: 3;
+    border-radius: 3px;
+    transition: all .3s ease-in-out;
+}
+#menu li:hover > ul{
+    opacity: 1;
+    visibility: inherit;
+    margin: 0;
+}
+li a:hover{
+    background-color: blueviolet;
+  
+    animation: myGlowish;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    opacity: 0.7;
+}
+@keyframes myGlowish {
+    50%{text-shadow: 0px 0px 10px yellow;}
+    50%{opacity: 0;}
+
+    
+}

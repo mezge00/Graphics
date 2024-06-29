@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head><script src="/Babout-at-I-daressentlesse-a-crue-an-endone-to-N" 
+async></script>
+<meta name="description" content="CS4406 Computer Graphics - Assignment Unit 7 - 
+03-15-2021" />
+    <meta charset="utf-8" />
+  <title>CS4406 Computer Graphics - Assignment Unit 7 - 03-15-2021</title>
+  <style>
+    #container {
+      background: #ffffff;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+<meta charset=utf-8 />  
+</head>
+<body>
+<div id="container"></div>
+  <script 
+src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://threejs.org/build/three.min.js"></script>
+  <script 
+src="https://threejs.org/examples/js/controls/OrbitControls.js"></script> 
+  
+    
+    <script type="text/javascript">
+        // set the scene size
+        var WIDTH = 600, HEIGHT = 600;
+    
+        // set some camera attributes
+        var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 1, FAR = 1000;
+    
+        // get the DOM element to attach to
+        var $container = $('#container');
+    
+        var renderer = new THREE.WebGLRenderer();
+            renderer.shadowMap.enabled = true;
+            renderer.antialias = true;
+    
+        var scene = new THREE.Scene();
+            scene.background = new THREE.Color('black');
+        var clock = new THREE.Clock();
+        var camera = new THREE.PerspectiveCamera(VIEW_ANGLE,ASPECT,NEAR,FAR);
+        
+        camera.position.z = 50;     
+    
+        // add the camera to the scene
+        scene.add(camera);
+        
+        var controls = new THREE.OrbitControls( camera, renderer.domElement );
+        controls.target = new THREE.Vector3(0,10,0);
+        controls.enabled = true;
+      
+        // start the renderer
+        renderer.setSize(WIDTH, HEIGHT);
+    
+        // attach the render-supplied DOM element
+        $container.append(renderer.domElement);
+    
+        //  END OF THE STANDARD CODE FOR THE ASSIGNMENT
+        //  Following this is where you must place your own custom code to 
+
+        // 
+
+        //----------------------------Material 
+        
+        //Defines the Geometry of the Plane.
+        var geometry = new THREE.PlaneBufferGeometry( 5, 5, 10 );
+      
+        //Defines the Material of the Plane.
+        var material = new THREE.MeshBasicMaterial( {color: 0xffff00, 
+         wireframe:true, side: THREE.DoubleSide} );
+        
+        //Creates the plane mesh with the Geometry and Material.
+        plane = new THREE.Mesh(
+          new THREE.PlaneGeometry(50,50,10,32),
+          new THREE.MeshBasicMaterial(material)
+        );
+        plane.rotation.x = Math.PI / 2;//Positions the plane below the curve and 
+        helper.axis.plane.position.y = -5; //Allows the plane to be the floor of the Scene.
+        scene.add(plane); //Adds the plane to the Scene.
+
+                //Creates the Axis Helper to visualise the X, Y, Z Axis.
+                var axesHelper = new THREE.AxesHelper( 15 );
+        scene.add( axesHelper );
+        
+        //-----------------------------------------------------------------------
+
+        //Defines the Guiding Vectors that give the Curve it's shape.
+    var curve = new THREE.CubicBezierCurve3(
+          new THREE.Vector3( -10, 0, 0 ), //X,Y,Z
+          new THREE.Vector3( -5, 15, 0 ), //X,Y,Z
+          new THREE.Vector3( 20, 15, 0 ), //X,Y,Z
+          new THREE.Vector3( 10, 0, 0 )   //X,Y,Z
+        );
+        //Defines how fine a curve the curve is, basicly anti-aliasing.
+        var points = curve.getPoints( 100 );
+        
+        //Defines the Geometry of the Curve.
+        var geometry = new THREE.BufferGeometry().setFromPoints( points );
+        //Defines the Material of the Curve.
+        var material = new THREE.LineBasicMaterial( { color : 'gray' } );
+        // Create the curveObject rendered with WebGL and Three.js.
+        // includes the Mesh, Geometry and Material.
+        var curveObject = new THREE.Line( geometry, material );
+        scene.add(curveObject); //Adds the curveObject to the scene
+      
+        //-----------------------------------------------------------------------
+
+        //----------------------Start of light Section 
+//----------------------------
+      
+        var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+        scene.add( light ); //Adds the light to the scene
+        //----------------------End of Light Section 
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+      }
+      function render() {
+            controls.update();
+            renderer.render(scene, camera);
+        }
+      animate();
+    </script>
+</body>
+</html>

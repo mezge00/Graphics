@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)file:///home/mezgebu/UoPeople/2021%20Term%20two/Graphics/All%20Projects/startfour.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="./Assignment #4 for CS4406 Computer Graphics_files/firebug-lite-debug.js"></script>
+<meta name="description" content="CS4406 Computer Graphics - Exercise #4">
+  	
+	<title>Assignment #4 for CS4406 Computer Graphics</title>
+	<style>
+		#container {
+			background: #000000;
+			width: 100%;
+			height: 100%;
+		}
+  </style>
+
+<title>CS4406 Computer Graphics - Exercise #4</title>
+  
+<style id="jsbin-css">
+
+</style>
+</head>
+<body>
+<div id="container">
+<canvas data-engine="three.js r135" width="600" height="600" style="display: block; touch-action: none; width: 600px; height: 600px;"></canvas></div>
+
+	<script src="./Assignment #4 for CS4406 Computer Graphics_files/jquery.min.js"></script> 
+	<script src="http://uopeopleweb.com/js/dat.gui.min.js"></script>
+	<script src="./Assignment #4 for CS4406 Computer Graphics_files/three.js"></script>
+    <script src="./Assignment #4 for CS4406 Computer Graphics_files/OrbitControls.js"></script>
+	<script src="http://uopeopleweb.com/js/math.js"></script>
+	<script src="http://uopeopleweb.com/js/Detector.js"></script>
+	<script type="text/javascript">
+
+
+
+	// set the scene size
+	var WIDTH = 600, HEIGHT = 600;
+
+	// set some camera attributes
+	var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 1, FAR = 1000;
+
+	// get the DOM element to attach to
+	var $container = $('#container');
+
+	// create a WebGL renderer, camera, and a scene
+        // NOTE: for the assignment in Unit 4 where you need to use a texture, or in any other assignment where a texture is required 
+	// you should deactivate the Detector and use ONLY the CanvasRenderer.  There are some issues in using waht are called Cross Domain images for 
+	// for textures.   You can get more details by looking up WebGL and CORS using Google search.  I have included some code below that will 
+	// get around this issue that you can use.
+      
+    var renderer = new THREE.WebGLRenderer();
+	var scene = new THREE.Scene();
+	var clock = new THREE.Clock();
+	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE,ASPECT,NEAR,FAR);
+	// the camera starts at 0,0,0 so pull it back
+        // the camera starts at 0,0,0 so pull it back for some assignments you may need to adjust this value
+	// some distance to make the scene visible properly
+	camera.position.z = 60;    	
+	// add the camera to the scene
+	scene.add(camera);
+   
+	// set up the camera controls.  Please keep in mind that what this does is move the entire scene around.
+	// because the entire scene is moving the position of the camera and lights in relation to objects within 
+	// the scene doesn't change so the lighting on the surface of the object(s) will not change either
+	var cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+	cameraControls.addEventListener( 'mousemove', renderer );
+      
+	// start the renderer
+	renderer.setSize(WIDTH, HEIGHT);
+        // enable shadow in renderer
+    renderer.shadowMap.enabled = true;
+        // set a soft shadow for renderer (default THREE.PCFShadowMap)
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+	// attach the render-supplied DOM element
+	$container.append(renderer.domElement);
+
+	// ----------------------------------------------------------------------------------------
+	//  Example of Code that you can adapt to get around the issue of Cross-Domain issues and 
+        //  CORS restrictions using textures.  We have this problem when using jsbin.com as a
+        //  development environment becuase we cannot load texture images to the local server.
+        //  Rather we need to pull them from location using a web URL.  You can use the images 
+        //  that we have put on the uopeopleweb.com site along with the following code (modified 
+	//  of course for your particular program)
+
+	var boxMaterial = new THREE.MeshLambertMaterial(
+	{
+        color:0xff0000, wireframe: false, side: THREE.DoubleSide
+	});
+
+	var boxGeometry = new THREE.BoxGeometry( 8, 8, 8 );
+	var box  = new THREE.Mesh( boxGeometry, boxMaterial);
+	scene.add(box);
+	// Second box 
+	var boxMaterial2=new THREE.MeshLambertMaterial({
+		color:0xffcc00,wireframe:false,side:THREE.DoubleSide
+
+	});
+	var boxGeometry2=new THREE.BoxGeometry(8,8,8);
+	var box2=new THREE.Mesh(boxGeometry2,boxMaterial2);
+	scene.add(box2);
+
+	var geometry = new THREE.BoxGeometry(10,10,10);
+    var material = new THREE.MeshPhongMaterial({
+    ambient: 0xccc555,
+    color: 0x5500f5,
+    specular: 0xcdffff,
+    shininess: 50,
+    shading: THREE.SmoothShading
+});
+var cube = new THREE.Mesh(geometry, material);
+var cube2=new THREE.Mesh(geometry,material);
+scene.add(cube);
+scene.add(cube2);
+
+	
+	
+	box.castShadow = true; 
+	box2.castShadow=true;
+
+	var light = new THREE.DirectionalLight( 0xffffaa, 1, 100 );  // color, intensity
+
+    // light = new THREE.PointLight(0xffffff, 1, 100);
+
+    // define a fixed position for the light
+    // the light is in the top left corner and slightly to the front of the object
+    // the chosen position shows the color change well
+    light.position.set( -1, 1, 1 ); 	
+    // set the castShadow for the light to true, enable the ball to cast shadow
+    light.castShadow = true;  
+    // add the light to the scene
+    scene.add( light );
+
+   // create a plane behind the ball on which the ball will cast a shadow
+   var planeGeometry = new THREE.PlaneBufferGeometry( 600, 600, 32, 32 );
+   var planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } )
+   var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+   // set receiveShadow on the plane
+   // notice that the ball now casts a shadow on the plane
+   plane.receiveShadow = true;
+   // add the plane to the scene
+   scene.add( plane );
+      
+    // ball's x-direction, y-direction and speed per frame
+    // these variables will be used in animation
+    var dirX = 1;
+    var dirY = 2;
+    var speed = 1;
+	var speed2=0.5;
+    
+	// animate function calls requestAnimationFrame to call animate   
+    // this creates a loop that will render the scene again
+    // whenever something within the scene changes
+	cube.position.y= 14;
+	cube.position.x=6;
+	box.position.x=-12;
+	box.position.y=12
+	box2.position.y=-12;
+	box2.position.x=12;
+	cube2.position.y=-12;
+	cube2.position.x=-12;
+
+	
+	function animate() {
+		requestAnimationFrame(animate);
+        // animate the ball in y direction
+        //box.position.y += dirY * speed;
+        // animate the ball in x direction
+		//cube.position.x+=dirX*0.001
+        //box.position.x += dirX * speed;
+		//box2.position.x+=dirX*speed2;
+        // the ball changes direction and color when it gets to the left wall
+        //if (box.position.x <= -73){
+          //dirX = -dirX;
+          //box.material.color.setHex( 0xff0000 );
+        //}
+		//For the second box
+		//if (box2.position.x <= -50){
+          //dirX = -dirX;
+         // box2.material.color.setHex( 0xff0000 );
+        //}
+
+      // the ball changes direction and color when it gets to the right wall
+      //if (box.position.x >= 73){
+       // dirX = -dirX; 
+       // box.material.color.setHex( 0x00ff00 );
+      //}
+	  //Box2 postion
+	  //if (box2.position.x >= 50){
+        //dirX = -dirX; 
+        //box2.material.color.setHex( 0x00ffaa );
+      //}
+      // the ball changes direction and color when it gets to the bottom wall
+      //if (box.position.y <= -73){
+          // dirY = -dirY;
+           //box.material.color.setHex( 0xffff00 );
+        //}	
+      // the ball changes direction and color when it gets to the top wall
+      //if (box.position.y >= 73){
+        //dirY = -dirY; 
+        //box.material.color.setHex( 0x0000ff );
+      //}
+	    //cube.rotation.x += 0.01;
+		box.rotation.y+=0.008
+		box2.rotation.y+=-0.04
+		cube2.rotation.y+=-0.03;
+		cube.rotation.y += 0.01;
+		renderer.render( scene, camera )
+	//render();
+	}
+
+
+
+	//
+	//  Notice that what this code does is create a new Texture object called Texture1 and loads
+	//	the texture image into the object.  
+	//  
+		var Texture1 = new THREE.Texture();
+        var loader = new THREE.ImageLoader();
+	//
+		//loader.addEventListener( 'load', function ( event ) {
+				//Texture1.image = event.content;
+				//Texture1.needsUpdate = true;
+        	//} );
+	//
+        	loader.load('https://upload.wikimedia.org/wikipedia/commons/9/94/Blue_wool_texture.png');
+			 wireframe= false; 
+			 side= THREE.DoubleSide;
+		
+	// ----------------------------------------------------------------------------------------
+	//  END OF THE STANDARD CODE FOR THE ASSIGNMENT
+	//  Following this is where you must place your own custom code to complete the assignment
+	// ----------------------------------------------------------------------------------------
+
+    
+
+
+
+
+
+	// ----------------------------------------------------------------------------------------
+	// END OF YOUR CUSTOM CODE FOR THE ASSIGNMENT
+	// The rendering functions that follow are standard and can be used for this assignment.  
+	// You are welcome to customize them or create your own if you desire, however, you can 
+	// simply use the code provided.
+
+
+
+	// call the animate function to start the animation
+	
+
+        animate();
+      
+      	</script>
+</body></html>

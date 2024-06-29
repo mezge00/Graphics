@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>please</title>
+    <style>
+        body{
+            background-color: rgb(20, 14, 61);
+        }
+        canvas{
+            background-color: rgb(29, 214, 38);
+            display: block;
+        }
+    </style>
+    <script>
+        let graphics;
+        let canvas;
+
+        function draw(){
+            graphics.font="bold 80px serif";
+            graphics.fillStyle="rgb(200,200,255)";
+            graphics.strokeStyle="rgb(0,0,150)";
+            graphics.linWidth=3;
+            graphics.fillText("Hello world",20,80);
+            graphics.strokeText("Hello World",20,80);
+
+
+        graphics.strokeStyle ="red";
+        graphics.lineWidth = 5;
+        graphics.beginPath();
+        graphics.moveTo(25,120);
+        graphics.lineTo(575,120);
+        graphics.stroke();
+
+        graphics.beginPath();
+        graphics.moveTo(250,300); // Move to start point of arc.
+        graphics.arc(150,300,100,0,2*Math.PI);  // A complete circle.
+        graphics.closePath();
+        graphics.fillStyle = "#FFFFAA"; // A CSS hexadecimal color code, light yellow.
+        graphics.strokeStyle = "black";
+        graphics.lineWidth = 5;
+        graphics.fill();
+        graphics.stroke();
+        
+
+
+        graphics.beginPath();
+        graphics.moveTo(300,250);
+        for(let i=1;i<=9;i++){
+            let angle=(2*Math.PI)/8*i;
+            let x=350+100*Math.cos(angle);
+            let y=250+100*Math.sin(angle);
+            graphics.lineTo(x,y);
+
+        }
+        graphics.closePath();
+        let gradient = graphics.createLinearGradient(420,420,550,200);
+        gradient.addColorStop(0,"red");
+        gradient.addColorStop(0.5,"yellow");
+        gradient.addColorStop(1,"green");
+        graphics.fillStyle = gradient;  // Use a linear gradient fill!
+        graphics.strokeStyle = "rgb(100,60,0)";
+        graphics.fill();
+        graphics.stroke();
+
+
+
+
+   
+
+
+        }
+        function init(){
+            try {
+            canvas = document.getElementById("myTour");
+            graphics = canvas.getContext("2d");
+        } catch(e) {
+            document.getElementById("canvasholder").innerHTML =
+               "<p>Canvas graphics is not supported.<br>" +
+               "An error occurred while initializing graphics.</p>";
+            return;
+        }
+        draw();
+        }
+        window.onload=init;
+
+    </script>
+</head>
+<body>
+    <Canvas id="myTour" width="500" height="600"></Canvas>
+</body>
+</html>

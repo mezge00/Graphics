@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="https://getfirebug.com/firebug-lite-debug.js"></script>
+<meta name="description" content="CS4406 Computer Graphics - Exercise #3" />
+  	<meta charset="utf-8" />
+	<title>Sample Three.js</title>
+	<style>
+		#container {
+			background: #000000;
+			width: 100%;
+			height: 100%;
+		        }
+  </style>
+<meta charset=utf-8 />
+<title>CS4406 Computer Graphics - Exercise #3</title>
+  
+<style id="jsbin-css">
+
+</style>
+</head>
+<body>
+<div id="container">
+</div>
+</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script> 
+	<script src="http://uopeopleweb.com/js/dat.gui.min.js"></script>
+	<script src="https://threejs.org/build/three.js"></script>
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+	<script src="http://uopeopleweb.com/js/math.js"></script>
+	<script src="http://uopeopleweb.com/js/Detector.js"></script>
+	<script type="text/javascript">
+
+	// set the scene size
+	var WIDTH = 500, HEIGHT = 500;
+
+	// set some camera attributes
+	var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 1, FAR = 1000;
+
+	// get the DOM element to attach to
+	var $container = $('#container');
+
+	// create a WebGL renderer, camera, and a scene
+        // NOTE: for the assignment in Unit 4 where you need to use a texture, or in any other assignment where a texture is required 
+	// you should deactivate the Detector and use ONLY the CanvasRenderer.  There are some issues in using waht are called Cross Domain images for 
+	// for textures.   You can get more details by looking up WebGL and CORS using Google search.  I have included some code below that will 
+	// get around this issue that you can use.
+      
+        var renderer = new THREE.WebGLRenderer();
+	var scene = new THREE.Scene();
+	var clock = new THREE.Clock();
+	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE,ASPECT,NEAR,FAR);
+	// the camera starts at 0,0,0 so pull it back
+        // the camera starts at 0,0,0 so pull it back for some assignments you may need to adjust this value
+	// some distance to make the scene visible properly
+	camera.position.z = 200;    	
+	// add the camera to the scene
+	scene.add(camera)
+   
+	// set up the camera controls.  Please keep in mind that what this does is move the entire scene around.
+	// because the entire scene is moving the position of the camera and lights in relation to objects within 
+	// the scene doesn't change so the lighting on the surface of the object(s) will not change either
+	var cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+	cameraControls.addEventListener( 'mousemove', renderer );
+      
+	// start the renderer
+	renderer.setSize(WIDTH, HEIGHT);
+        // enable shadow in renderer
+        renderer.shadowMap.enabled = true;
+        // set a soft shadow for renderer (default THREE.PCFShadowMap)
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+	// attach the render-supplied DOM element
+	$container.append(renderer.domElement);
+
+	// ----------------------------------------------------------------------------------------
+	//  END OF THE STANDARD CODE FOR THE ASSIGNMENT
+	//  Following this is where you must place your own custom code to complete the assignment
+	// ----------------------------------------------------------------------------------------
+
+	// create the material for the ball 
+        // starting with red color
+	var ballMaterial = new THREE.MeshLambertMaterial(
+	{
+        color:0xff0000, wireframe: false, side: THREE.DoubleSide
+	});
+      
+        // 3D object selected: sphere
+        // create the ball geometry with diameter 15 and 32 separations 
+        var ballGeometry = new THREE.SphereGeometry( 15, 32, 32 );
+    
+        // apply the geometry and material to the ball  
+        var ball  = new THREE.Mesh( ballGeometry, ballMaterial);   
+        // apply castshadow to the ball so it will cast shadow to the plane
+        ball.castShadow = true; 
+        // set receiveShadow to false so that other objects don't cast shadow on the ball
+        ball.receiveShadow = false; 
+   	// add the ball to the scene
+	scene.add( ball );   
+
+    // create a directional light that casts white light
+
+    var light = new THREE.DirectionalLight( 0xffffaa, 1, 100 );  // color, intensity
+
+    // light = new THREE.PointLight(0xffffff, 1, 100);
+
+    // define a fixed position for the light
+    // the light is in the top left corner and slightly to the front of the object
+    // the chosen position shows the color change well
+    light.position.set( -1, 1, 1 ); 	
+    // set the castShadow for the light to true, enable the ball to cast shadow
+    light.castShadow = true;  
+    // add the light to the scene
+    scene.add( light );
+
+   // create a plane behind the ball on which the ball will cast a shadow
+   var planeGeometry = new THREE.PlaneBufferGeometry( 600, 600, 32, 32 );
+   var planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } )
+   var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+   // set receiveShadow on the plane
+   // notice that the ball now casts a shadow on the plane
+   plane.receiveShadow = true;
+   // add the plane to the scene
+   scene.add( plane );
+      
+    // ball's x-direction, y-direction and speed per frame
+    // these variables will be used in animation
+    var dirX = 1;
+    var dirY = 2;
+    var speed = 3;
+    
+	// animate function calls requestAnimationFrame to call animate   
+    // this creates a loop that will render the scene again
+    // whenever something within the scene changes
+	function animate() {
+		requestAnimationFrame(animate);
+        // animate the ball in y direction
+        ball.position.y += dirY * speed;
+        // animate the ball in x direction
+        ball.position.x += dirX * speed;
+        // the ball changes direction and color when it gets to the left wall
+        if (ball.position.x <= -73){
+          dirX = -dirX;
+          ball.material.color.setHex( 0xff0000 );
+        }	
+      // the ball changes direction and color when it gets to the right wall
+      if (ball.position.x >= 73){
+        dirX = -dirX; 
+        ball.material.color.setHex( 0x00ff00 );
+      }
+      // the ball changes direction and color when it gets to the bottom wall
+      if (ball.position.y <= -73){
+           dirY = -dirY;
+           ball.material.color.setHex( 0xffff00 );
+        }	
+      // the ball changes direction and color when it gets to the top wall
+      if (ball.position.y >= 73){
+        dirY = -dirY; 
+        ball.material.color.setHex( 0x0000ff );
+      }
+        renderer.render( scene, camera )
+	//render();
+	}
+
+	// call the animate function to start the animation
+	animate();
+      
+      
+	</script>
+</html>

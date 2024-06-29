@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="https://getfirebug.com/firebug-lite-debug.js"></script>
+    <meta name="description" content="CS4406 Computer Graphics - Exercise #3" />
+    <meta charset="UTF-8">
+    <title>CS4406 Assignment for Unit Five</title>
+    <style>
+        #container{
+            background-color: black;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <style id="jsbin-css">
+
+</style>
+</head>
+<body>
+    
+    <div id="container"></div>
+ 
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script> 
+	<script src="http://uopeopleweb.com/js/dat.gui.min.js"></script>
+	<script src="https://threejs.org/build/three.js"></script>
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+	<script src="http://uopeopleweb.com/js/math.js"></script>
+	<script src="http://uopeopleweb.com/js/Detector.js"></script>
+	<script type="text/javascript">
+// creating the width of the canvas
+//set the width of the scene
+var width=500, height=600;
+
+// Set the camera position
+var VIEW_ANGLE=45, ASPECT=width/height, near=1,far=1000;
+
+// get the dom 
+	var $container = $('#container');
+
+    //creating WebGL elments such as render, camera, clock and scene
+
+    var renderer = new THREE.WebGLRenderer();
+    var scene=new THREE.Scene();
+    var clock=new THREE.Clock();
+    var camera=new THREE.PerspectiveCamera(VIEW_ANGLE,ASPECT,near,far);
+
+    //setting the camera position
+    
+    camera.position.z=200;
+    //add camera to the scene
+    
+    scene.add(camera);
+
+    // set up camera controls 
+    // set up the camera controls.  Please keep in mind that what this does is move the entire scene around.
+	// because the entire scene is moving the position of the camera and lights in relation to objects within 
+	// the scene doesn't change so the lighting on the surface of the object(s) will not change either
+	var cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+	cameraControls.addEventListener( 'mousemove', renderer );
+
+// start the renderer
+	renderer.setSize(width, height);
+        // enable shadow in renderer
+        renderer.shadowMap.enabled = true;
+        // set a soft shadow for renderer (default THREE.PCFShadowMap)
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+	// attach the render-supplied DOM element
+	$container.append(renderer.domElement);
+
+
+// create the material for the ball 
+        // starting with red color
+	var ballMaterial = new THREE.MeshLambertMaterial(
+	{
+        color:0xff0000, wireframe: false, side: THREE.DoubleSide
+	});
+      
+        // 3D object selected: sphere
+        // create the ball geometry with diameter 15 and 32 separations 
+        var ballGeometry = new THREE.SphereGeometry( 10, 20, 20 );
+    
+        // apply the geometry and material to the ball  
+        var ball  = new THREE.Mesh( ballGeometry, ballMaterial);   
+        // apply castshadow to the ball so it will cast shadow to the plane
+        ball.castShadow = true; 
+        // set receiveShadow to false so that other objects don't cast shadow on the ball
+        ball.receiveShadow = false; 
+   	// add the ball to the scene
+	scene.add( ball );   
+
+    // Creating cylinder
+
+    var cylinderMaterial = new THREE.MeshLambertMaterial(
+	{
+        color:0xf5f7f6, wireframe: false, side: THREE.DoubleSide,
+    ambient: 0xccc555,
+    color: 0x1000ed,
+    specular: 0xcdffff,
+    shininess: 50,
+    shading: THREE.SmoothShading
+	});
+      
+        // 3D object selected: sphere
+        // create the ball geometry with diameter 15 and 32 separations 
+        var cylinderGeometry = new THREE.CylinderGeometry( 5,5, 50, 5 );
+
+        // apply the geometry and material to the ball  
+        var cylinder  = new THREE.Mesh( cylinderGeometry, cylinderMaterial);
+        var cylinder1  = new THREE.Mesh( cylinderGeometry, cylinderMaterial);
+        var cylinder2  = new THREE.Mesh( cylinderGeometry, cylinderMaterial);
+        var cylinder3  = new THREE.Mesh( cylinderGeometry, cylinderMaterial); 
+        // apply castshadow to the ball so it will cast shadow to the plane
+        cylinder.castShadow = true; 
+        cylinder1.castShadow=true;
+        cylinder2.castShadow=true;
+        cylinder3.castShadow=true;
+
+        // set receiveShadow to false so that other objects don't cast shadow on the ball
+     cylinder.receiveShadow = false;
+     cylinder1.receiveShadow=false;
+     cylinder2.receiveShadow=false;
+     cylinder3.receiveShadow=false;
+
+   	// add the ball to the scene
+	scene.add(cylinder);  
+    scene.add(cylinder1);
+    scene.add(cylinder2);
+    scene.add(cylinder3);
+
+
+
+    // create a directional light that casts white light
+
+    var light = new THREE.DirectionalLight( 0xffffaa, 1, 100 );  // color, intensity
+
+    // light = new THREE.PointLight(0xffffff, 1, 100);
+
+    // define a fixed position for the light
+    // the light is in the top left corner and slightly to the front of the object
+    // the chosen position shows the color change well
+    light.position.set( 10, -15, 5 ); 	
+    // set the castShadow for the light to true, enable the ball to cast shadow
+    light.castShadow = true;  
+    // add the light to the scene
+    scene.add( light );
+
+   // create a plane behind the ball on which the ball will cast a shadow
+   var planeGeometry = new THREE.PlaneBufferGeometry( 600, 600, 32, 32 );
+   var planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } )
+   var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+   // set receiveShadow on the plane
+   // notice that the ball now casts a shadow on the plane
+   plane.receiveShadow = true;
+   // add the plane to the scene
+   scene.add( plane );
+      
+    // ball's x-direction, y-direction and speed per frame
+    // these variables will be used in animation
+    var dirX = 1;
+    var dirY = 2;
+    var speed = 3;
+    ball.position.y= 14;
+    cylinder.position.z=-15;
+    cylinder1.rotation.z+=90;
+
+    cylinder1.position.y=30;
+    cylinder2.positi
+    cylinder1.rotation.z+=2*Math.PI/90;on.x=-15;
+    cylinder2.rotation.z+=90;
+
+    cylinder3.position.x=15;
+    cylinder3.rotation.x+=90;
+
+
+    
+	function animate() {
+		requestAnimationFrame(animate);
+        
+      
+	  // Creating rotation 
+		ball.rotation.y+=0.8;
+
+		//box2.rotation.y+=-0.04;
+		//cube2.rotation.y+=-0.03;
+		//cube.rotation.y += 0.01;
+		renderer.render( scene, camera )
+	//render();
+	}
+animate();
+
+
+
+
+    </script>
+</html>

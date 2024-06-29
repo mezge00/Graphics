@@ -1,0 +1,287 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="CS4406 Computer Graphics - Exercise #3" />
+  	<meta charset="utf-8" />
+	<title>Sample Three.js</title>
+	<style>
+		body {
+			background: #000000;
+			width: 100%;
+			height: 100%;
+		        }
+  </style>
+<meta charset=utf-8 />
+<title>CS4406 Computer Graphics - Exercise #3</title>
+  
+
+
+</style>
+</head>
+<body>
+   <script src="threee.js"></script>
+   <script src="OrbitControls.js"></script>
+
+   <script>
+	
+
+	// set the scene size
+	
+	// set some camera attributes
+
+	// get the DOM element to attach to
+	
+
+	// create a WebGL renderer, camera, and a scene
+        // NOTE: for the assignment in Unit 4 where you need to use a texture, or in any other assignment where a texture is required 
+	// you should deactivate the Detector and use ONLY the CanvasRenderer.  There are some issues in using waht are called Cross Domain images for 
+	// for textures.   You can get more details by looking up WebGL and CORS using Google search.  I have included some code below that will 
+	// get around this issue that you can use.
+      
+    var renderer = new THREE.WebGLRenderer();
+	var scene = new THREE.Scene();
+	var clock = new THREE.Clock();
+	var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,3000);
+	// the camera starts at 0,0,0 so pull it back
+        // the camera starts at 0,0,0 so pull it back for some assignments you may need to adjust this value
+	// some distance to make the scene visible properly
+	camera.position.z = -20;    	
+	// add the camera to the scene
+	scene.add(camera)
+   
+	// set up the camera controls.  Please keep in mind that what this does is move the entire scene around.
+	// because the entire scene is moving the position of the camera and lights in relation to objects within 
+	// the scene doesn't change so the lighting on the surface of the object(s) will not change either
+	//var cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+	//cameraControls.addEventListener( 'mousemove', renderer );
+    //renderer.setSize(window.innerWidth,window.innerHeight);
+    //renderer.shadowMap.enabled=true;
+	// start the renderer
+	   renderer.setSize(window.innerWidth, window.innerHeight);
+        // enable shadow in renderer
+      renderer.shadowMap.enabled = true;
+        // set a soft shadow for renderer (default THREE.PCFShadowMap)
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+	// attach the render-supplied DOM element
+	document.body.appendChild(renderer.domElement);
+    //var orbit=new THREE.OrbitControls(camera,renderer.domElement);
+       // orbit.miDistance=1;
+       // orbit.maxDistance=2000;
+
+	
+
+	var famGeometry=new THREE.PlaneGeometry(60,30,16,16);
+    var famMaterial= new THREE.MeshPhongMaterial({
+        map:new THREE.TextureLoader().load('./family.jpg'),
+        side:THREE.DoubleSide});
+
+    //var material=new THREE.MeshFaceMaterial(planeMaterial);
+
+    var family=new THREE.Mesh(famGeometry,famMaterial);
+   family.position.z=-100;
+   family.position.y=20
+   family.position.x=-100;
+
+    scene.add(family);
+
+
+    var travelGeometry=new THREE.PlaneGeometry(60,30,15,15);
+    var travelMaterial= new THREE.MeshPhongMaterial({
+        map:new THREE.TextureLoader().load('./Explore.png'),
+        side:THREE.DoubleSide});
+
+    //var material=new THREE.MeshFaceMaterial(planeMaterial);
+
+    var travel=new THREE.Mesh(travelGeometry,travelMaterial);
+    travel.position.z=-1000;
+    travel.position.y=20;
+    travel.position.x=-30;
+
+    scene.add(travel);
+
+    var houseGeometry=new THREE.PlaneGeometry(60,30,15,15);
+    var houseMaterial= new THREE.MeshPhongMaterial({
+        map:new THREE.TextureLoader().load('./White Luxury Dream house with the Pool (2).jpg'),
+        side:THREE.DoubleSide});
+
+
+    
+
+    var house=new THREE.Mesh(houseGeometry,houseMaterial);
+    house.position.z=-1000;
+    house.position.y=20;
+    house.position.x=40;
+
+    scene.add(house);
+
+
+    var watchGeometry=new THREE.PlaneGeometry(60,30,15,15);
+    var watchMaterial= new THREE.MeshPhongMaterial({
+        map:new THREE.TextureLoader().load('./Watch.jpg'),
+        side:THREE.DoubleSide});
+
+
+    
+
+    var watch=new THREE.Mesh(watchGeometry,watchMaterial);
+    watch.position.z=-1000;
+    watch.position.y=-50;
+    watch.position.x=-30;
+
+    scene.add(watch);
+
+    var carGeometry=new THREE.PlaneGeometry(60,30,15,15);
+    var carMaterial= new THREE.MeshPhongMaterial({
+        map:new THREE.TextureLoader().load('./Maserati MC20.jpg'),
+        side:THREE.DoubleSide});
+
+
+    
+
+    var car=new THREE.Mesh(carGeometry,carMaterial);
+    car.position.z=-1000;
+    car.position.y=-50;
+    car.position.x=-100;
+
+    scene.add(car);
+
+
+   
+
+    var churchGeometry=new THREE.PlaneGeometry(60,30,15,15);
+    var churchMaterial= new THREE.MeshPhongMaterial({
+        map:new THREE.TextureLoader().load('./Christian Church.jpg'),
+        side:THREE.DoubleSide});
+
+
+    
+
+    var church=new THREE.Mesh(churchGeometry,churchMaterial);
+    church.position.z=-1000;
+    church.position.y=-50;
+    church.position.x=50;
+
+    scene.add(church);
+
+    var resortGeometry=new THREE.PlaneGeometry(60,30,15,15);
+    var resortMaterial= new THREE.MeshPhongMaterial({
+        map:new THREE.TextureLoader().load('./Own a Luxuary Resort.jpg'),
+        side:THREE.DoubleSide});
+    
+
+    var resort=new THREE.Mesh(resortGeometry,resortMaterial);
+    resort.position.z=-1000;
+    resort.position.y=-50;
+    resort.position.x=100;
+
+    scene.add(resort);
+
+    // create a directional light that casts white light
+
+    var light = new THREE.DirectionalLight( 0xffffaa, 1, 100 );  // color, intensity
+
+    // light = new THREE.PointLight(0xffffff, 1, 100);
+
+    // define a fixed position for the light
+    // the light is in the top left corner and slightly to the front of the object
+    // the chosen position shows the color change well
+    light.position.set( 1, 2, 10 ); 	
+    // set the castShadow for the light to true, enable the ball to cast shadow
+    light.castShadow = true;  
+    // add the light to the scene
+    scene.add( light );
+
+   // create a plane behind the ball on which the ball will cast a shadow
+   var dirX=-1;
+   var dirY=-1;
+   var dirZ=-100;
+ 
+    
+	function animate() {
+		requestAnimationFrame(animate);
+        //house.rotation.z+=0.001;
+       // house.rotation.y+=0.001;
+       
+
+       if (house.position.z>400){
+        house.position.z=-1000
+       }
+       house.position.z+=0.5;
+
+       if (family.position.x>window.innerWidth){
+        house.position.x=-100
+       }
+
+       family.position.x+=0.01
+       
+
+    
+        
+
+
+     
+        house.position.y-=0.01;
+        house.position.x-=0.01;
+        if (travel.position.z>300){
+            travel.position.z=-1000
+       }
+        travel.rotation.z+=0.002;
+        travel.rotation.x+=0.002
+        travel.position.z+=0.5;
+
+       // car.rotation.z+=0.002;
+        //car.rotation.y+=0.003;
+        //car.rotation.x+=0.001;
+        if (car.position.z>1000){
+            car.position.z=-1000
+       }
+        car.position.x+=0.02;
+        car.position.z+=0.5;
+
+        watch.position.y+=0.01;
+        if (watch.position.z>100){
+            watch.position.z=-1000
+        }
+        watch.position.z+=0.5;
+        if (church.position.z>100){
+            church.position.z=-1000
+        }
+        church.position.z+=0.1;
+
+        if (resort.position.z>100){
+
+            resort.position.z=-1000;
+
+        }
+        resort.rotation.z+=0.00003;
+        resort.rotation.y+=0.003;
+        resort.position.z+=0.5;
+        resort.position.y+=0.0005;
+
+    
+
+        // animate the ball in y direction
+       // ball.position.y += dirY * speed;
+      // family.rotation.x+=0.002;
+       //family.position.y+=0.004;
+
+       
+     
+        renderer.render( scene, camera )
+	//render();
+	}
+
+	// call the animate function to start the animation
+	animate();
+      
+      
+	</script>
+</body>
+
+</html>
+
+

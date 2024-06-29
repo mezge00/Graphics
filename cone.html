@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Grapher</title>
+</head>
+<body>
+<script src="threee.js"></script>
+<script src="OrbitControls.js"></script>
+   <script>
+       
+
+    // Creating a scene, camera and render objects 
+    
+
+        var scene=new THREE.Scene();
+        var clock=new THREE.Clock();
+        var camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,2000);
+        camera.position.z=300;   // Setting the camera position
+        scene.add(camera);
+        var renderer=new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.shadowMap.enabled=true;  // Enabling the render to cast the shadow using light 
+        renderer.shadowMap.type=THREE.PCFSoftShadowMap;  // specifying the shadow type 
+        document.body.appendChild(renderer.domElement);
+
+        // Creating the orbit objectso that it responds when we make an adjustment
+
+        var orbit=new THREE.OrbitControls(camera,renderer.domElement);
+        orbit.maxDistance=1000;
+        orbit.minDistance=1;
+        //Making our scene to adjust the size automatically when the window minimized
+
+        window.addEventListener('resize',function(){
+            var width=window.innerWidth;
+            var height=window.innerHeight;
+            renderer.setSize(width,height);
+            camera.aspect=width/height;
+            camera.updateProjectionMatrix();
+        })
+
+        // Creating axes helper 
+        
+        var axis=new THREE.AxesHelper(100);
+        axis.position.y=20
+        scene.add(axis);
+
+        //Creating a function grapher
+    var myfunc;
+        
+for(let x=-1;x<=1;x+=0.1){
+    for(let y=-1;y<=1;y+=0.1){
+       myfunc =function(x,y){
+           var  z=x^2+y^2;
+            new THEE.Vertex3(x,y,z);
+        }
+    }
+
+}// Creating The goemetry and meshing the material.
+       var mygeo=new THREE.ParametricGeometry(myfunc, 25, 25 );
+        var mymaterial=new THREE.MeshStandardMaterial({color:0x34fcad});
+        var cone=new THREE.Mesh(mygeo,mymaterial);
+        cone.position.y=40;
+        scene.add(cone);
+         
+  
+        // creating a plane 
+
+        var planeGeometery=new THREE.PlaneGeometry(300,600,32,32);
+        var planeMaterial=new THREE.MeshStandardMaterial({color:0x037ffc,wireframe:true});
+        var plane=new THREE.Mesh(planeGeometery,planeMaterial);
+        plane.receiveShadow=true;
+        plane.rotation.x+=181; // Rotated to make it as a floor
+        scene.add(plane);
+
+        //Adding a light into the scene 
+        var directionalLight=new THREE.DirectionalLight(0xffffff,2);
+        directionalLight.position.set(100,100,100);
+        directionalLight.castShadow=true;
+        scene.add(directionalLight);
+        orbit.update();
+
+        //creating animating function
+
+        function animate(){
+            requestAnimationFrame(animate);
+
+            renderer.render(scene,camera);
+
+        }
+        animate();
+
+
+    </script>
+    
+    
+</body>
+</html>

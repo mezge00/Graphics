@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style>
+        body{
+            margin: auto;
+            background: rgb(138, 11, 131);
+            z-index: 998;
+            
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lights and shading</title>
+</head>
+<body>
+    <script src="threee.js"></script>
+    <script>
+        // Creating scene, Camera and renderer objcets
+
+        var scene=new THREE.Scene();
+        var clock=new THREE.Clock();
+        var camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1000);
+        camera.position.z=300;
+        scene.add(camera);
+
+        var renderer=new THREE.WebGLRenderer();
+        
+        //renderer.setClearColor( 0xffffff, 0);
+        //renderer.shadowMap.enabled = true;
+        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+       //renderer.setClearColorHex( 0xffff00, 1);
+
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        scene.background = new THREE.Color( 0x820ddb );
+
+        // Creating cube object
+
+        var boxGeometry=new THREE.BoxGeometry(30,30,30);
+        var boxMaterial=new THREE.MeshBasicMaterial({
+            ambient: 0xccc555, 
+            side:THREE.DoubleSide,
+            wireframe:false,
+            color:0x4b1a73,
+            specular: 0x00ff00,
+            shiness:50,
+            shading: THREE.SmoothShading
+         });
+        var cube=new THREE.Mesh(boxGeometry,boxMaterial);
+        cube.castShadow = true; 
+        cube.receiveShadow=false;
+
+        scene.add(cube);
+        
+
+        // Creating Lith object 
+        //var light=new THREE.AmbientLight(0xccc040,10);
+        //var light=new THREE.AmbientLightProbe(0x111111,20);
+        //var light = new THREE.DirectionalLight( 0xffff00, 10, 100 );        //var light=new THREE.HemisphereLight(0xffffbb, 0x080820,1);
+        //var light=new THREE.Light(0xf0ebec,1);
+        //var light=new THREE.PointLight(0xffffbb,0.5);
+        //const width = 10;
+       //const height = 10;
+        //const intensity = 1;
+       //const rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
+       //rectLight.position.set( 5, 5, 0 );
+       //rectLight.lookAt( 0, 0, 0 );
+       //scene.add( rectLight )
+       const spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position.set( 100, 1000, 100 );
+
+        spotLight.castShadow = true;
+
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+
+        spotLight.shadow.camera.near = 500;
+        spotLight.shadow.camera.far = 4000;
+        spotLight.shadow.camera.fov = 30;
+        
+
+        
+
+
+    // const d = 100;
+
+      //light.shadow.camera.left = - d;
+      //light.shadow.camera.right = d;
+      //light.shadow.camera.top = d;
+      //light.shadow.camera.bottom = - d;
+
+        //light.castShadow = true;
+       //light.shadow.mapSize.width = 500;
+       //light.shadow.mapSize.height = 500;
+       // light.shadow.camera.near = 1;
+       //light.shadow.camera.far = 100;
+
+      // spotLight.position.set(-10, 1, 1); 	
+
+
+        scene.add( spotLight );
+
+        //scene.add(light);
+
+       var planeGeometry = new THREE.PlaneBufferGeometry( 300, 300, 32, 32 );
+       var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x111aaa} )
+       var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+   // set receiveShadow on the plane
+   // notice that the ball now casts a shadow on the plane
+       plane.receiveShadow = true;
+   // add the plane to the scene
+       scene.add(plane);
+
+
+        //camera.position.set(0,50,50);
+        //camera.lookAt(0,0,0);
+
+        function animate(){
+            requestAnimationFrame(animate);
+
+            cube.rotation.y+=0.002;
+            cube.rotation.x+=0.002;
+            cube.rotation.z+=0.02;
+
+
+
+            renderer.render(scene,camera);
+            
+        }
+        animate();
+
+    </script>
+</body>
+</html>

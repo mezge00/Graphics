@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body{
+            margin: 0%;
+            background-color: rebeccapurple;
+            
+        }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planet Orbits</title>
+</head>
+<body>
+    <script src="threee.js"></script>
+    
+
+    <script>
+
+        // Creating a scene, renderer, and camera
+
+        var scene=new THREE.Scene();
+        var clock=new THREE.Clock();
+        var camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1000);
+        camera.position.z=200; // Setting the camera position
+        scene.add(camera);     // We should have to add the camera to the scene
+
+        var renderer=new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.shadowMap.enabled=true;        
+        renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+       
+
+        // This helps us to resize the scene when we minimize or maximize the screen
+        
+        window.addEventListener('resize',function(){
+            var width=window.innerWidth;
+            var height=window.innerHeight;
+            renderer.setSize(width,height);
+            camera.aspect=width/height;
+            camera.UpdateProjectionMatrix();
+
+        });
+
+
+        
+
+      // Creating the sphere geometry so that we can have the earth 
+
+        var sphereGeometry=new THREE.SphereGeometry(50,50,50);
+        var sphereMaterial=new THREE.MeshPhongMaterial({  // Using the phong material 
+                                                          //which is better for lightning
+            roughness:1,                   
+            metalness:0,
+            map:new THREE.TextureLoader().load('./glob.png'),   // Loading the bicture
+            side:THREE.DoubleSide
+    });
+
+    // creating the camera pivot
+    
+
+
+        var earth=new THREE.Mesh(sphereGeometry,sphereMaterial);  // Meshing the the sphere
+       // Adding some properties of to earth such us casting shadow, receiving shadow 
+        earth.castShadow=true;
+        earth.receiveShadow=false;
+        scene.add(earth);   // Adding the earth to the scene
+
+        // Adding the axis to pivot earth
+        var cameraPivot=new THREE.Object3D();   
+        earth.add(cameraPivot);     // Adding the axis of the pivot to the earth
+        cameraPivot.add(camera);
+
+        //creation of moon object
+        var moonGeometry=new THREE.SphereGeometry(20,20,20);
+        var moonMaterial=new THREE.MeshPhongMaterial({
+            
+            roughness:1,
+            metalness:0,
+            map:new THREE.TextureLoader().load('./moon.png'),
+            side:THREE.DoubleSide
+    });
+       
+        var moon=new THREE.Mesh(moonGeometry,moonMaterial);
+
+        moon.castShadow=true;
+        moon.receiveShadow=false;
+        moon.position.x=100;
+
+
+        scene.add(moon);
+
+        //creating axis for moon
+
+        var moonPivot=new THREE.Object3D();
+        earth.add(moonPivot);
+        moonPivot.add(moon);
+
+
+
+
+        // Metoroites 
+
+        var moonGeometry=new THREE.SphereGeometry(20,20,20);
+        var moonMaterial=new THREE.MeshPhongMaterial({
+            
+            roughness:1,
+            metalness:0,
+            map:new THREE.TextureLoader().load('./moon.png'),
+            side:THREE.DoubleSide
+    });
+       
+        var moon=new THREE.Mesh(moonGeometry,moonMaterial);
+
+        moon.castShadow=true;
+        moon.receiveShadow=false;
+        moon.position.x=100;
+
+
+        scene.add(moon);
+
+        //creating axis for moon
+
+        var moonPivot=new THREE.Object3D();
+        earth.add(moonPivot);
+        moonPivot.add(moon);
+
+        
+        
+
+
+
+
+
+
+        // Adding spot light
+        var spotLight=new THREE.SpotLight(0xffffff,1);
+        spotLight.position.set(100,30,100);
+
+        //scene.add(light);
+        scene.add(spotLight);
+
+        var spotLight2=new THREE.SpotLight(0xc00fff,2);
+        spotLight2.position.set(-100,-30,-100);
+        spotLight2.lookAt(100,20,20);
+
+        //scene.add(light);
+        scene.add(spotLight2);
+     
+
+        // Animating the all objects 
+        function animate(){
+            requestAnimationFrame(animate);
+
+            cameraPivot.rotation.y-=0.001;
+            moonPivot.rotation.y-=0.02;
+            moonPivot.rotation.x=0.02; // rotating on fixed axis  
+            earth.rotation.y+=0.004;
+            renderer.render(scene,camera);
+        }
+        animate();
+    </script>
+</body>
+</html>

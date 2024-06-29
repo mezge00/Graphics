@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Curves</title>
+</head>
+<body>
+    <script src="threee.js"></script>
+    <script>
+        var scene=new THREE.Scene();
+        var clock=new THREE.Clock();
+        var camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerWidth,1,2000);
+        camera.position.z=10;
+        scene.add(camera);
+
+        var renderer=new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.shadowMap.enabled=true;
+        renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        window.addEventListener('resize',function(){
+            var width=window.innerWidth;
+            var height=window.innerHeight;
+            renderer.setSize(width,height);
+            camera.aspect=width/height;
+            camera.updateProjectionMatrix;
+        });
+        // Create a sine-like wave
+const curve = new THREE.SplineCurve( [
+	new THREE.Vector2( -10, 0 ),
+	new THREE.Vector2( -5, 5 ),
+	new THREE.Vector2( 0, 0 ),
+	new THREE.Vector2( 5, -5 ),
+	new THREE.Vector2( 10, 0 )
+] );
+
+const points = curve.getPoints(1000);
+const geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+const material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+
+// Create the final object to add to the scene
+const splineObject = new THREE.Line( geometry, material );
+/*
+        const x = 0, y = 0;
+
+        const heartShape = new THREE.Shape();
+ 
+           heartShape.moveTo( x + 5, y + 5 );
+           heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+           heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+           heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+           heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+           heartShape.bezierCurveTo( x^2 + 16, y^2 + 7, x^2 + 16, y, x + 10, y );
+           heartShape.bezierCurveTo( x^3 + 7, y^4, x + 5, y + 5, x + 5, y + 5 );
+
+           heartShape.bezierCurveTo( x + 10, y^4, x + 3, y + 5, x + 5, y + 5 );
+           heartShape.bezierCurveTo( x^3 + 8, y^4, x + 13, y + 5, x + 5, y + 5 );
+
+
+
+        const geometry = new THREE.ShapeGeometry( heartShape );
+        const material = new THREE.MeshBasicMaterial( { color: 0xccff00, wireframe:true } );
+        const mesh = new THREE.Mesh( geometry, material ) ;
+       ;**/
+       scene.add( splineObject )
+
+
+        function animate(){
+            requestAnimationFrame(animate);
+
+            splineObject.rotation.y+=0.009;
+            splineObject.rotation.z+=0.009;
+
+
+            renderer.render(scene,camera);
+        }
+    animate();
+
+
+
+
+    </script>
+    
+</body>
+</html>

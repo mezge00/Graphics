@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body{
+            margin: 0%;
+        }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texture and shading</title>
+</head>
+<body>
+    <script src="threee.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+
+        var scene=new THREE.Scene();
+        var clock=new THREE.Clock();
+        var camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1000);
+        camera.position.z=300;
+        scene.add(camera);
+
+        var renderer=new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.shadowMap.enabled=true;
+        renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+        
+        window.addEventListener('resize',function(){
+            var width=window.innerWidth;
+            var height=window.innerHeight;
+            renderer.setSize(width,height);
+            camera.aspect=width/height;
+            camera.UpdateProjectionMatrix();
+
+        });
+
+        var orbits=new THREE.OrbitControls(camera,renderer.domElement);
+        orbits.minDistance=1;
+        orbits.maxDistance=1000;
+
+        var cubeGeometry=new THREE.BoxGeometry(20,20,20);
+        var cubeMaterial=[
+            new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('./myd.jpg'), side:THREE.DoubleSide}),
+            new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('./arrowa.png'), side:THREE.DoubleSide}),
+            new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('./eye.png'), side:THREE.DoubleSide}),
+            new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('./panora.png'), side:THREE.DoubleSide}),
+            new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('./WM.png'), side:THREE.DoubleSide}),
+            new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('./stone.png'), side:THREE.DoubleSide}),
+        ];
+        var material=new THREE.MeshFaceMaterial(cubeMaterial);
+        var cube=new THREE.Mesh(cubeGeometry,material);
+
+        cube.castShadow=true;
+        cube.receiveShadow=false;
+        cube.position.y=20;
+
+
+        scene.add(cube);
+
+        
+
+
+
+      var plane1=new THREE.Mesh(new THREE.PlaneGeometry(15,25),new THREE.MeshStandardMaterial({
+         
+          color:'blue'
+
+      }))
+      scene.add(plane1);
+
+
+
+        //creatining a texture
+       
+        //Creating plane 
+        var planeGeometry=new THREE.PlaneBufferGeometry(200,200,32,32);
+        var planeMaterial=new THREE.MeshStandardMaterial({color:0x01facb});
+        var plane=new THREE.Mesh(planeGeometry,planeMaterial);
+
+        plane.receiveShadow=true;
+        plane.rotation.x+=181;
+
+        scene.add(plane);
+
+
+        var light=new THREE.DirectionalLight(0xfccabd,2,100);
+        light.castShadow=true;
+        light.position.set(100,100,100);
+
+        scene.add(light);
+        orbits.update();
+
+        function animate(){
+            requestAnimationFrame(animate);
+
+            renderer.render(scene,camera);
+        }
+        animate();
+
+    </script>
+    
+</body>
+</html>

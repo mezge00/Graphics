@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    your area
+</head>
+<title>Canvas Graphics</title>
+<body>
+    
+    <canvas id="mainCanvas" width="500" height="500"></canvas>
+<script>
+	
+var canvas = document.getElementById("mainCanvas");
+var ctx = canvas.getContext("2d");
+ctx.clearRect(0, 0, windowWidth, windowHeight);
+ 
+var halfWidth = (iconWidth / 2);
+var halfHeight = (iconHeight / 2);
+ 
+var centreX = x - halfWidth;
+var centreY = y - halfHeight;
+ 
+ctx.fillStyle = "#03fc13";
+ctx.translate(centreX, centreY);
+ctx.rotate(rotationDegree * Math.PI / 180);
+ctx.fillRect(-halfWidth, -halfHeight, iconWidth, iconHeight);
+ 
+ctx.translate(-centreX, -centreY);
+</script>
+
+
+</body>
+</html>
